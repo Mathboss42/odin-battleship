@@ -1,4 +1,4 @@
-import Gameboard from './gameboard'
+import Gameboard from './gameboard';
 import Ship from './ship';
 
 test('Instantiating a gameboard', () => {
@@ -26,7 +26,7 @@ test('Place a ship', () => {
     expect(gameboard.placedShips).toContainEqual({id: 'asd', ship: {hits: 0, length: 4, sunk: false}});
 
     expect(() => gameboard.placeShip([4, 7], 'galley', 4, 'vertical')).toThrow(Error);
-})
+});
 
 test('Receive an attack', () => {
     const gameboard = new Gameboard(10);
@@ -59,4 +59,5 @@ test('Receive an attack', () => {
     expect(gameboard.hitTiles).toContainEqual([7, 3]);
     expect(gameboard.sunkShips).toBe(1);
 
+    
 });

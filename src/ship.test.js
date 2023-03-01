@@ -1,4 +1,4 @@
-import Ship from './ship'
+import Ship from './ship';
 
 test('Instantiating a ship', () => {
     const ship = new Ship(4, 0, false);

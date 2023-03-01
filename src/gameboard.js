@@ -38,12 +38,12 @@ class Gameboard {
 
     receiveAttack(coords) {
         if (this.hitTiles.some(el => {
-            return el.includes(coords[0]) && el.includes(coords[1])
+            return el.includes(coords[0]) && el.includes(coords[1]);
         })) {
             throw new Error('Illegal shot: tile already shot');
         } else {
             if (!this.occupiedTiles.some(el => {
-                return el.includes(coords[0]) && el.includes(coords[1])
+                return el.includes(coords[0]) && el.includes(coords[1]);
             })) {
                 this.firedTiles.push(coords);
                 this.missedTiles.push(coords);
