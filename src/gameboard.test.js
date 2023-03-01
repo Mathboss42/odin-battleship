@@ -11,6 +11,10 @@ test('Instantiating a gameboard', () => {
 test('Place a ship', () => {
     const gameboard = new Gameboard(10);
 
+    gameboard.placeShip([4, 1], 'qwe', 4, 'horizontal');
+    expect(gameboard.occupiedTiles).toContainEqual([4, 1, 'qwe'], [5, 1, 'qwe'], [6, 1, 'qwe'], [7, 1, 'qwe']);
+    expect(gameboard.placedShips).toContainEqual({id: 'qwe', ship: {hits: 0, length: 4, sunk: false}});
+
     gameboard.placeShip([4, 3], 'galley', 4, 'horizontal');
     expect(gameboard.occupiedTiles).toContainEqual([4, 3, 'galley'], [5, 3, 'galley'], [6, 3, 'galley'], [7, 3, 'galley']);
     expect(gameboard.placedShips).toContainEqual({id: 'galley', ship: {hits: 0, length: 4, sunk: false}});
@@ -29,4 +33,30 @@ test('Receive an attack', () => {
     gameboard.placeShip([4, 3], '1', 4, 'horizontal');
 
     expect(gameboard.receiveAttack([4, 2])).toBe(undefined);
+    expect(gameboard.firedTiles).toContainEqual([4, 2]);
+    expect(gameboard.sunkShips).toBe(0);
+
+    gameboard.receiveAttack([4, 3]);
+    expect(gameboard.placedShips).toContainEqual({id: '1', ship: {hits: 1, length: 4, sunk: false}});
+    expect(gameboard.hitTiles).toContainEqual([4, 3]);
+    expect(gameboard.sunkShips).toBe(0);
+    
+    expect(() => gameboard.receiveAttack([4, 3])).toThrow(Error);
+    expect(gameboard.sunkShips).toBe(0);
+    
+    gameboard.receiveAttack([5, 3]);
+    expect(gameboard.placedShips).toContainEqual({id: '1', ship: {hits: 2, length: 4, sunk: false}});
+    expect(gameboard.hitTiles).toContainEqual([5, 3]);
+    expect(gameboard.sunkShips).toBe(0);
+    
+    gameboard.receiveAttack([6, 3]);
+    expect(gameboard.placedShips).toContainEqual({id: '1', ship: {hits: 3, length: 4, sunk: false}});
+    expect(gameboard.hitTiles).toContainEqual([6, 3]);
+    expect(gameboard.sunkShips).toBe(0);
+    
+    gameboard.receiveAttack([7, 3]);
+    expect(gameboard.placedShips).toContainEqual({id: '1', ship: {hits: 4, length: 4, sunk: true}});
+    expect(gameboard.hitTiles).toContainEqual([7, 3]);
+    expect(gameboard.sunkShips).toBe(1);
+
 });
