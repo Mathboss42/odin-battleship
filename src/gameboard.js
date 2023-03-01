@@ -27,9 +27,17 @@ class Gameboard {
                 this.occupiedTiles.push([coords[0], coords[1], id]);
                 coords[1]++;
             }
-            
+
             this.placedShips.push({id: id, ship});
         }
+    }
+
+    receiveAttack(coords) {
+        if (!this.occupiedTiles.some(el => 
+            {el.includes(coords[0]) && el.includes(coords[1])}
+        )) return;
+
+        return -1;
     }
 }
 
