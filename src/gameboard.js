@@ -1,21 +1,46 @@
+import { generateCoords } from "./coordsGenerator";
 import Ship from "./ship";
 
 class Gameboard {
-    constructor(length) {
+    constructor(length, isAiBoard) {
         this.length = length;
+        this.isAiBoard =  isAiBoard;
         this.occupiedTiles = [];
         this.placedShips = [];
         this.hitTiles = [];
         this.missedTiles = [];
         this.firedTiles = [];
         this.sunkShips = 0;
+        this.negScore = 0;
     }
 
-    placeShip(coords, id, length, direction) {
+    placeShip(coords = [], id, length, direction) {
         const ship = new Ship(length);
 
+        if (this.occupiedTiles.some(el => {
+            return el.includes(coords[0]) && el.includes(coords[1]);
+        })) {
+            console.log('invalid coords for ship placement');
+            if (this.isAiBoard) {
+                console.log('recu')
+                this.placeShip(generateCoords(this.length), id, length, direction);
+                return;
+            } else {
+                return;
+            }
+        }
+
         if (direction === 'horizontal') {
-            if (coords[0] + length > this.length) throw new Error('Illegal placement');
+            if (coords[0] + length > this.length) {
+                console.log('illegal placement');
+                if (this.isAiBoard) {
+                    console.log('recu')
+                    this.placeShip(generateCoords(this.length), id, length, direction);
+                    return;
+                } else {
+                    return;
+                }
+            };
 
             for (let i = 0; i < length; i++) {
                 this.occupiedTiles.push([coords[0], coords[1], id]);
@@ -25,7 +50,16 @@ class Gameboard {
             this.placedShips.push({id: id, ship});
             
         } else {
-            if (coords[1] + length > this.length) throw new Error('Illegal placement');
+            if (coords[1] + length > this.length) {
+                console.log('illegal placement');
+                if (this.isAiBoard) {
+                    console.log('recu')
+                    this.placeShip(generateCoords(this.length), id, length, direction);
+                    return;
+                } else {
+                    return;
+                }
+            };
             
             for (let i = 0; i < length; i++) {
                 this.occupiedTiles.push([coords[0], coords[1], id]);
@@ -37,17 +71,22 @@ class Gameboard {
     }
 
     receiveAttack(coords) {
-        if (this.hitTiles.some(el => {
+        if (coords.length !== 2 || coords[0] > this.length || coords[0] < 1 || coords[1] > this.length || coords[1] < 1) {
+            console.log('invalid coords');
+            return;
+        }
+        if (this.firedTiles.some(el => {
             return el.includes(coords[0]) && el.includes(coords[1]);
         })) {
-            throw new Error('Illegal shot: tile already shot');
+            console.log('illegal');
+            return;
         } else {
             if (!this.occupiedTiles.some(el => {
                 return el.includes(coords[0]) && el.includes(coords[1]);
             })) {
                 this.firedTiles.push(coords);
                 this.missedTiles.push(coords);
-                return;
+                return 1;
             };
 
             const id = this.#getId(coords);
@@ -58,10 +97,13 @@ class Gameboard {
             if (ship.hits === ship.length) {
                 ship.sunk = true;
                 this.sunkShips++;
+                this.negScore++;
             }
 
             this.hitTiles.push(coords);
             this.firedTiles.push(coords);
+
+            return 1;
         }
     }
 

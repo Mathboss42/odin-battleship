@@ -5,13 +5,15 @@ class Player {
         this.score = 0;
     }
 
-    attack(boardLength, callback, coords = null) {
+    attack(boardLength, board, coords = []) {
         if (this.isMyTurn) {
             if (!this.isAi) {
-                callback(coords);
+                return board.receiveAttack(coords);
             } else {
-                coords = Math.random() * (boardLength - 1) + 1;
-                callback(coords);
+                coords[0] = Math.floor(Math.random() * (boardLength - 1) + 1);
+                coords[1] = Math.floor(Math.random() * (boardLength - 1) + 1);
+                console.log(coords);
+                return board.receiveAttack(coords);
             }
         } else {
             return;
