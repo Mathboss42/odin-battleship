@@ -1,8 +1,11 @@
+import { generateCoords } from "./coordsGenerator";
+
 class Player {
     constructor(isAi, isMyTurn) {
         this.isAi = isAi;
         this.isMyTurn = isMyTurn;
         this.score = 0;
+        this.triedAttacks = [];
     }
 
     attack(boardLength, board, coords = []) {
@@ -10,8 +13,12 @@ class Player {
             if (!this.isAi) {
                 return board.receiveAttack(coords);
             } else {
-                coords[0] = Math.floor(Math.random() * (boardLength - 1) + 1);
-                coords[1] = Math.floor(Math.random() * (boardLength - 1) + 1);
+                coords = generateCoords(boardLength);
+                if (this.triedAttacks.includes(coords)) {
+                    while(this.triedAttacks.includes(coords)) {
+                        coords = generateCoords(boardLength);
+                    }
+                }
                 console.log(coords);
                 return board.receiveAttack(coords);
             }

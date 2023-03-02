@@ -15,11 +15,12 @@ class Gameboard {
     }
 
     placeShip(coords = [], id, length, direction) {
-        console.log('place ship please')
+        console.log(this.isAiBoard ? 'AI place ship' : 'place ship')
+
         const ship = new Ship(length);
 
         if (this.occupiedTiles.some(el => {
-            return el.includes(coords[0]) && el.includes(coords[1]);
+            return el[0] === coords[0] && el[1] === coords[1];
         })) {
             console.log('invalid coords for ship placement');
             console.log(id)
@@ -73,28 +74,34 @@ class Gameboard {
     }
 
     receiveAttack(coords) {
+        console.log('receive attack', this.isAiBoard)
         if (coords.length !== 2 || coords[0] > this.length || coords[0] < 1 || coords[1] > this.length || coords[1] < 1) {
             console.log('invalid coords');
             return;
         }
         if (this.firedTiles.some(el => {
-            return el.includes(coords[0]) && el.includes(coords[1]);
+            return el[0] === coords[0] && el[1] === coords[1];
         })) {
             console.log('illegal');
             return;
         } else {
             if (!this.occupiedTiles.some(el => {
-                return el.includes(coords[0]) && el.includes(coords[1]);
+                return el[0] === coords[0] && el[1] === coords[1];
             })) {
+                console.log('frangipane')
                 this.firedTiles.push(coords);
                 this.missedTiles.push(coords);
                 return 1;
             };
 
+            console.log('lol')
             const id = this.#getId(coords);
+            console.log('id', id)
 
             const ship = this.#getShip(id).ship;
+            console.log('ship', ship)
             ship.hit()
+            console.log('fasdasd')
 
             if (ship.hits === ship.length) {
                 ship.sunk = true;
@@ -110,11 +117,13 @@ class Gameboard {
     }
 
     #getShip(id) {
-        return this.placedShips.filter(el => this.id === id)[0];
+        // console.log('getship', this.placedShips.filter(el => {console.log(el.id == ide);return el.id == ide}))
+        // console.log('getship', this.placedShips.filter(el => {console.log(el.id, ide);return el.id === ide}))
+        return this.placedShips.filter(el => el.id === id)[0];
     }
 
     #getId(coords) {
-        return this.occupiedTiles.filter(el => el.includes(coords[0]) && el.includes(coords[1]))[2];
+        return this.occupiedTiles.filter(el => el.includes(coords[0]) && el.includes(coords[1]))[0][2];
     }
 }
 

@@ -30,10 +30,12 @@ function endGame(winner) {
 }
 
 export function handleAttack(entity, coords = []) {
+    console.log('handle attack', entity.isAi)
     const targetBoard = getTargetBoard(entity);
     const attack = entity.attack(boardLength, targetBoard, coords);
     console.log(attack);
     if (!attack) {
+        console.log('returned')
         return;
     }
     if (targetBoard.negScore === targetBoard.placedShips.length) {
@@ -123,4 +125,7 @@ console.log(playerBoard);
 handleAttack(player, [2, 2]);
 handleAttack(ai);
 handleAttack(player, [3, 2]);
+handleAttack(ai);
+handleAttack(player, [3, 2]);
+handleAttack(player, [4, 2]);
 handleAttack(ai);
