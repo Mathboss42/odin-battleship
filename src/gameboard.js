@@ -17,6 +17,7 @@ class Gameboard {
     placeShip(coords = [], id, length, direction) {
         console.log(this.isAiBoard ? 'AI place ship' : 'place ship')
 
+        let newCoords = [...coords];
         const ship = new Ship(length);
 
         if (this.occupiedTiles.some(el => {
@@ -35,7 +36,7 @@ class Gameboard {
 
         if (direction === 'horizontal') {
             if (coords[0] + length > this.length) {
-                console.log('illegal placement');
+                console.log('illegal placement', coords[0], length, this.length);
                 if (this.isAiBoard) {
                     console.log('recu')
                     this.placeShip(generateCoords(this.length), id, length, direction);
@@ -46,8 +47,8 @@ class Gameboard {
             };
 
             for (let i = 0; i < length; i++) {
-                this.occupiedTiles.push([coords[0], coords[1], id]);
-                coords[0]++;
+                this.occupiedTiles.push([newCoords[0], newCoords[1], id]);
+                newCoords++;
             }
 
             this.placedShips.push({id: id, ship});
@@ -65,8 +66,8 @@ class Gameboard {
             };
             
             for (let i = 0; i < length; i++) {
-                this.occupiedTiles.push([coords[0], coords[1], id]);
-                coords[1]++;
+                this.occupiedTiles.push([newCoords[0], newCoords[1], id]);
+                newCoords[1]++;
             }
 
             this.placedShips.push({id: id, ship});

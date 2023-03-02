@@ -26,16 +26,23 @@ function generateGrid(boardLength, node) {
 }
 
 export function placeShip(coords, length, direction) {
-    const cells = getAllCells(coords, length, direction)
+    const cells = getAllCells(coords, length, direction);
+
+    console.log('placeShip', cells, coords);
+
+    cells.forEach(el => {
+        el.classList.add('occupied');
+    });
 }
 
 export function highlight(coords, length, direction) {
     const cells = getAllCells(coords, length, direction);
+
+    console.log('highlight', cells, coords);
     
     cells.forEach(el => {
         el.classList.add('highlighted');
     });
-    console.log(cells);
 }
 
 // export function unHighlight(coords, length, direction) {
@@ -58,13 +65,13 @@ export function clearHighlighted() {
 }
 
 export function getCoords(event) {
-    return [event.target.dataset.x, event.target.dataset.y];
+    return [parseInt(event.target.dataset.x), parseInt(event.target.dataset.y)];
 }
 
 export function getAllCells(coords, length, direction) {
-    if (direction === 'horizontal' && parseInt(coords[0]) + 3 > boardSize) {
+    if (direction === 'horizontal' && coords[0] + length-1 > boardSize) {
         return;
-    } else if (direction === 'vertical' && parseInt(coords[1]) + 3 > boardSize) {
+    } else if (direction === 'vertical' && coords[1] + length-1 > boardSize) {
         return;
     }
     
@@ -73,11 +80,19 @@ export function getAllCells(coords, length, direction) {
     for(let i = 0; i < length; i++) {
         // console.log('asd')
         if (direction === 'horizontal') {
-            cells.push(document.querySelector(`[data-x='${parseInt(coords[0]) + i}'][data-y='${coords[1]}']`));
+            cells.push(document.querySelector(`[data-x='${coords[0] + i}'][data-y='${coords[1]}']`));
         } else {
-            cells.push(document.querySelector(`[data-x='${coords[0]}'][data-y='${parseInt(coords[1]) + i}']`));
+            cells.push(document.querySelector(`[data-x='${coords[0]}'][data-y='${coords[1] + i}']`));
         }
     }
 
     return cells;
+}
+
+export function isAvailable(coords, length, direction) {
+    const cells = getAllCells(coords, length, direction);
+
+    cells.forEach(el => {
+
+    });
 }

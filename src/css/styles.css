@@ -83,3 +83,7 @@ button {
 .highlighted {
     background-color: lightgreen;
 }
+
+.occupied {
+    background-color: lightblue;
+}

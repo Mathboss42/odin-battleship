@@ -31,7 +31,7 @@ function handleStartGame() {
         if (e.code === 'KeyR') {
             // hoveringCell.dispatchEvent(eventMouseLeave);
             direction === 'horizontal' ? direction = 'vertical' : direction = 'horizontal';
-            // hoveringCell.dispatchEvent(eventMouseOver);
+            hoveringCell.dispatchEvent(eventMouseOver);
         };
     });
 }
@@ -43,7 +43,7 @@ function handleMouseOver(e) {
     const coords = domManager.getCoords(e);
     domManager.highlight(coords, getNextShipLength(), direction);
     hoveringCell = e.target;
-    console.log('hoveringCell', hoveringCell)
+    // console.log('hoveringCell', hoveringCell)
 }
 
 // function handleMouseLeave(e) {
@@ -55,9 +55,10 @@ function handleMouseOver(e) {
 function handleClick(e) {
     if (game.getCurrentPhase() === 'ship placement') {
         const coords = domManager.getCoords(e);
-        console.log(coords);
-        // game.handlePlaceShip(coords, String(lastId), getNextShipLength(), direction);
+        game.handlePlaceShip(coords, String(lastId), getNextShipLength(), direction);
+        console.log('handleClick', coords);
         domManager.placeShip(coords, getNextShipLength(), direction);
+        lastId++;
     } else {
         return;
     }
@@ -80,5 +81,4 @@ function getNextShipLength() {
         case 9 :
             return 1;
     }
-    lastId++;
 }
