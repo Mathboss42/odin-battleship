@@ -5,6 +5,8 @@ import { generateCoords } from "./coordsGenerator";
 const boardLength = 10;
 const numberOfShips = 10;
 
+let currentPhase = undefined;
+
 let currentPlayer;
 
 let player;
@@ -52,10 +54,10 @@ function switchTurns() {
     } 
 }
 
-export function handlePlaceShip(coords, length, direction) {
+export function handlePlaceShip(coords, direction) {
     lastId++;
-    if (playerBoard.placedShips.length <= numberOfShips) {
-        playerBoard.placeShip(coords, lastId, length, direction);
+    if (playerBoard.placedShips.length < numberOfShips) {
+        playerBoard.placeShip(coords, lastId, 4, direction);
     } else {
         return;
     }
