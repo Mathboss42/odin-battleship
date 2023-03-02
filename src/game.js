@@ -58,33 +58,42 @@ function switchTurns() {
     } 
 }
 
-export function handlePlaceShip(coords, direction) {
+export function handlePlaceShip(coords, id, length, direction) {
     if (playerBoard.placedShips.length < numberOfShips) {
-        switch (lastId) {
-            case 0 :
-                playerBoard.placeShip(coords, String(lastId), 4, direction);
-                break;
-            case 1 :
-            case 2 :
-                playerBoard.placeShip(coords, String(lastId), 3, direction);
-                break;
-            case 3 :
-            case 4 :
-            case 5 :
-                playerBoard.placeShip(coords, String(lastId), 2, direction);
-                break;
-            case 6 :
-            case 7 :
-            case 8 :
-            case 9 :
-                playerBoard.placeShip(coords, String(lastId), 1, direction);
-                break;
-        }
-        lastId++;
+        playerBoard.placeShip(coords, id, length, direction);
+        console.log(playerBoard);
     } else {
         return;
     }
 }
+
+// export function handlePlaceShip(coords, direction) {
+//     if (playerBoard.placedShips.length < numberOfShips) {
+//         switch (lastId) {
+//             case 0 :
+//                 playerBoard.placeShip(coords, String(lastId), 4, direction);
+//                 break;
+//             case 1 :
+//             case 2 :
+//                 playerBoard.placeShip(coords, String(lastId), 3, direction);
+//                 break;
+//             case 3 :
+//             case 4 :
+//             case 5 :
+//                 playerBoard.placeShip(coords, String(lastId), 2, direction);
+//                 break;
+//             case 6 :
+//             case 7 :
+//             case 8 :
+//             case 9 :
+//                 playerBoard.placeShip(coords, String(lastId), 1, direction);
+//                 break;
+//         }
+//         lastId++;
+//     } else {
+//         return;
+//     }
+// }
 
 function handleAiPlaceShip() {
     aiBoard.placeShip(generateCoords(boardLength), String(0), 4, getRandomDirection());
@@ -106,6 +115,10 @@ function getTargetBoard(entity) {
 export function getRandomDirection() {
     const roll = Math.floor(Math.random() * 2); 
     return roll === 1 ? 'horizontal' : 'vertical';
+}
+
+export function getCurrentPhase() {
+    return currentPhase;
 }
 
 // startGame();
