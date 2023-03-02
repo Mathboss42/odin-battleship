@@ -29,8 +29,22 @@ export function placeShip(coords, length, direction) {
     const cells = getAllCells(coords, length, direction)
 }
 
-export function highlight(event) {
-    // console.log(coords[0], coords[1])
+export function highlight(coords, length, direction) {
+    const cells = getAllCells(coords, length, direction);
+    console.log(cells);
+
+    cells.forEach(el => {
+        el.classList.add('highlighted');
+    });
+}
+
+export function unHighlight(coords, length, direction) {
+    const cells = getAllCells(coords, length, direction);
+    console.log(cells);
+
+    cells.forEach(el => {
+        el.classList.remove('highlighted');
+    });
 }
 
 export function getCoords(event) {
@@ -55,5 +69,5 @@ export function getAllCells(coords, length, direction) {
         }
     }
 
-    console.log('cells', cells);
+    return cells;
 }

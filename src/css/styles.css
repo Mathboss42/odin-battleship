@@ -79,3 +79,7 @@ button {
 .cell {
     border: solid 1px black;
 }
+
+.highlighted {
+    background-color: lightgreen;
+}

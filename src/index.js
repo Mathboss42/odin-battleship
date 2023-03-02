@@ -18,6 +18,7 @@ function handleStartGame() {
     const playerGridCells = document.querySelectorAll('.player-board > .grid > .cell');
     playerGridCells.forEach(el => {
         el.addEventListener('mouseover', handleMouseOver);
+        el.addEventListener('mouseleave', handleMouseLeave);
         el.addEventListener('click', handleClick);
     });
     document.addEventListener('keydown', (e) => {
@@ -30,7 +31,13 @@ window.handleStartGame = handleStartGame;
 
 
 function handleMouseOver(e) {
-    domManager.highlight(e, direction);
+    const coords = domManager.getCoords(e);
+    domManager.highlight(coords, getNextShipLength(), direction);
+}
+
+function handleMouseLeave(e) {
+    const coords = domManager.getCoords(e);
+    domManager.unHighlight(coords, getNextShipLength(), direction);
 }
 
 function handleClick(e) {
