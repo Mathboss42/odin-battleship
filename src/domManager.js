@@ -31,18 +31,20 @@ export function placeShip(coords, length, direction) {
 
 export function highlight(coords, length, direction) {
     const cells = getAllCells(coords, length, direction);
-    console.log(cells);
-
+    
     cells.forEach(el => {
         el.classList.add('highlighted');
     });
+    console.log(cells);
 }
 
 export function unHighlight(coords, length, direction) {
+    console.log('unHilight');
     const cells = getAllCells(coords, length, direction);
-    console.log(cells);
+    // console.log(cells);
 
     cells.forEach(el => {
+        console.log('frangipane', el)
         el.classList.remove('highlighted');
     });
 }
@@ -61,7 +63,7 @@ export function getAllCells(coords, length, direction) {
     const cells = [];
 
     for(let i = 0; i < length; i++) {
-        console.log('asd')
+        // console.log('asd')
         if (direction === 'horizontal') {
             cells.push(document.querySelector(`[data-x='${parseInt(coords[0]) + i}'][data-y='${coords[1]}']`));
         } else {

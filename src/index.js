@@ -3,13 +3,19 @@ import * as game from './game';
 import * as domManager from './domManager';
 import { generateCoords } from "./coordsGenerator";
 
+const playerGridCells = document.querySelectorAll('.player-board > .grid > .cell');
+
 const boardLength = 10;
+
+const eventMouseOver = new Event('mouseover');
+const eventMouseLeave = new Event('mouseleave');
+
+let hoveringCell;
 
 let lastId = 0;
 
 let direction = 'horizontal';
 
-const playerGridCells = document.querySelectorAll('.player-board > .grid > .cell');
 
 function handleStartGame() {
     console.log('handle start')
@@ -23,7 +29,9 @@ function handleStartGame() {
     });
     document.addEventListener('keydown', (e) => {
         if (e.code === 'KeyR') {
+            hoveringCell.dispatchEvent(eventMouseLeave);
             direction === 'horizontal' ? direction = 'vertical' : direction = 'horizontal';
+            hoveringCell.dispatchEvent(eventMouseOver);
         };
     });
 }
@@ -33,9 +41,12 @@ window.handleStartGame = handleStartGame;
 function handleMouseOver(e) {
     const coords = domManager.getCoords(e);
     domManager.highlight(coords, getNextShipLength(), direction);
+    hoveringCell = e.target;
+    console.log('hoveringCell', hoveringCell)
 }
 
 function handleMouseLeave(e) {
+    console.log('handlemouseevent', e.target)
     const coords = domManager.getCoords(e);
     domManager.unHighlight(coords, getNextShipLength(), direction);
 }
