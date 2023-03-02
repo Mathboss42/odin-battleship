@@ -1,9 +1,22 @@
-import css from "./styles.css";
+import css from "./css/styles.css";
 import * as game from './game';
+import * as domManager from './domManager';
 import { generateCoords } from "./coordsGenerator";
 
-document.addEventListener('click', () => {
-    game.handlePlaceShip(generateCoords(), game.getRandomDirection());
-})
+const boardLength = 10;
 
-// game.player.attack(10, [4, 3]);
+const playerGridCells = document.querySelectorAll('.player-board > .grid > .cell');
+
+function handleStartGame() {
+    console.log('handle start')
+    game.startGame();
+    domManager.startGame(boardLength);
+    playerGridCells.forEach(el => {
+        el.addEventListener('click', placeShip);
+    });
+}
+window.handleStartGame = handleStartGame;
+
+function placeShip(coords) {
+    console.log('placeShip')
+}
