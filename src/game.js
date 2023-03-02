@@ -15,7 +15,7 @@ let ai;
 let playerBoard;
 let aiBoard;
 
-let lastId = -1; 
+let lastId = 0; 
 
 export function startGame() {
     player = new Player(false, true);
@@ -55,19 +55,44 @@ function switchTurns() {
 }
 
 export function handlePlaceShip(coords, direction) {
-    lastId++;
     if (playerBoard.placedShips.length < numberOfShips) {
-        playerBoard.placeShip(coords, lastId, 4, direction);
+        switch (lastId) {
+            case 0 :
+                playerBoard.placeShip(coords, String(lastId), 4, direction);
+                break;
+            case 1 :
+            case 2 :
+                playerBoard.placeShip(coords, String(lastId), 3, direction);
+                break;
+            case 3 :
+            case 4 :
+            case 5 :
+                playerBoard.placeShip(coords, String(lastId), 2, direction);
+                break;
+            case 6 :
+            case 7 :
+            case 8 :
+            case 9 :
+                playerBoard.placeShip(coords, String(lastId), 1, direction);
+                break;
+        }
+        lastId++;
     } else {
         return;
     }
 }
 
 function handleAiPlaceShip() {
-    for (let i = 0; i < numberOfShips; i++) {
-        // console.log(i);
-        aiBoard.placeShip(generateCoords(boardLength), i, 2, 'vertical');
-    }
+    aiBoard.placeShip(generateCoords(boardLength), String(0), 4, getRandomDirection());
+    aiBoard.placeShip(generateCoords(boardLength), String(1), 3, getRandomDirection());
+    aiBoard.placeShip(generateCoords(boardLength), String(2), 3, getRandomDirection());
+    aiBoard.placeShip(generateCoords(boardLength), String(3), 2, getRandomDirection());
+    aiBoard.placeShip(generateCoords(boardLength), String(4), 2, getRandomDirection());
+    aiBoard.placeShip(generateCoords(boardLength), String(5), 2, getRandomDirection());
+    aiBoard.placeShip(generateCoords(boardLength), String(6), 1, getRandomDirection());
+    aiBoard.placeShip(generateCoords(boardLength), String(7), 1, getRandomDirection());
+    aiBoard.placeShip(generateCoords(boardLength), String(8), 1, getRandomDirection());
+    aiBoard.placeShip(generateCoords(boardLength), String(9), 1, getRandomDirection());
 }
 
 function getTargetBoard(entity) {
@@ -82,8 +107,18 @@ export function getRandomDirection() {
 startGame();
 console.log(aiBoard);
 handleAiPlaceShip();
-handlePlaceShip([4,3], 4, 'vertical');
-handlePlaceShip([5,3], 4, 'vertical');
+handlePlaceShip([4,3], 'vertical');
+handlePlaceShip([5,3], 'vertical');
+handlePlaceShip([6,3], 'vertical');
+handlePlaceShip([7,3], 'vertical');
+handlePlaceShip([8,3], 'vertical');
+handlePlaceShip([9,3], 'vertical');
+handlePlaceShip([10,3], 'vertical');
+handlePlaceShip([10,4], 'vertical');
+handlePlaceShip([10,5], 'vertical');
+handlePlaceShip([10,6], 'vertical');
+handlePlaceShip([10,7], 'vertical');
+handlePlaceShip([10,8], 'vertical');
 console.log(playerBoard);
 handleAttack(player, [2, 2]);
 handleAttack(ai);

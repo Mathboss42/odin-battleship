@@ -15,12 +15,14 @@ class Gameboard {
     }
 
     placeShip(coords = [], id, length, direction) {
+        console.log('place ship please')
         const ship = new Ship(length);
 
         if (this.occupiedTiles.some(el => {
             return el.includes(coords[0]) && el.includes(coords[1]);
         })) {
             console.log('invalid coords for ship placement');
+            console.log(id)
             if (this.isAiBoard) {
                 console.log('recu')
                 this.placeShip(generateCoords(this.length), id, length, direction);
