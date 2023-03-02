@@ -22,7 +22,7 @@ class Gameboard {
 
         if (this.occupiedTiles.some(el => {
             return el[0] === coords[0] && el[1] === coords[1];
-        })) {
+        }) || !this.checkAdjacent(coords, length, direction)) {
             console.log('invalid coords for ship placement');
             console.log(id)
             if (this.isAiBoard) {
@@ -35,7 +35,7 @@ class Gameboard {
         }
 
         if (direction === 'horizontal') {
-            if (coords[0] + length > this.length) {
+            if (coords[0] + length-1 > this.length) {
                 console.log('illegal placement', coords[0], length, this.length);
                 if (this.isAiBoard) {
                     console.log('recu')
@@ -48,13 +48,15 @@ class Gameboard {
 
             for (let i = 0; i < length; i++) {
                 this.occupiedTiles.push([newCoords[0], newCoords[1], id]);
-                newCoords++;
+                newCoords[0]++;
             }
 
             this.placedShips.push({id: id, ship});
+            console.log('this is suppsoed to return 1', this)
+            return 1;
             
         } else {
-            if (coords[1] + length > this.length) {
+            if (coords[1] + length-1 > this.length) {
                 console.log('illegal placement');
                 if (this.isAiBoard) {
                     console.log('recu')
@@ -71,8 +73,55 @@ class Gameboard {
             }
 
             this.placedShips.push({id: id, ship});
+            console.log('this is suppsoed to return 1', this)
+            return 1;
         }
     }
+
+    checkAdjacent(coords, length, direction) {
+        let newCoords = [...coords];
+
+        const xDirection = [1, 1, 1, 0, -1, -1, -1, 0];
+        const yDirection = [-1, 0, 1, 1, 1, 0, -1, -1];
+    
+        if (direction === 'horizontal') {
+            for (let i = 0; i < length; i++) {
+                for (let j = 0; j < xDirection.length; j++) {
+                    const newNewCoords = [...newCoords];
+                    newNewCoords[0] += xDirection[j];
+                    newNewCoords[1] += yDirection[j];
+
+                    if (this.occupiedTiles.some(el => {
+                        return el[0] === newNewCoords[0] && el[1] === newNewCoords[1];
+                    })) {
+                        console.log(-1)
+                        return 0;
+                    }
+                }
+                newCoords[0]++;
+            }
+        } else {
+            for (let i = 0; i < length; i++) {
+                for (let j = 0; j < xDirection.length; j++) {
+                    const newNewCoords = [...newCoords];
+                    newNewCoords[0] += xDirection[j];
+                    newNewCoords[1] += yDirection[j];
+
+                    if (this.occupiedTiles.some(el => {
+                        return el[0] === newNewCoords[0] && el[1] === newNewCoords[1];
+                    })) {
+                        console.log(-1)
+                        return 0;
+                    }
+                }
+                newCoords[1]++;
+            }
+        }
+
+        console.log(1);
+        return 1;
+    }
+    
 
     receiveAttack(coords) {
         console.log('receive attack', this.isAiBoard)

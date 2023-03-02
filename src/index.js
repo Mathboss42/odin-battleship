@@ -55,10 +55,20 @@ function handleMouseOver(e) {
 function handleClick(e) {
     if (game.getCurrentPhase() === 'ship placement') {
         const coords = domManager.getCoords(e);
-        game.handlePlaceShip(coords, String(lastId), getNextShipLength(), direction);
+        // if (!game.checkAdjacent(coords, getNextShipLength(), direction)) {
+        //     console.log('adjacent');
+        //     return;
+        // }
+
+        const placeShip = game.handlePlaceShip(coords, String(lastId), getNextShipLength(), direction);
         console.log('handleClick', coords);
-        domManager.placeShip(coords, getNextShipLength(), direction);
-        lastId++;
+
+        if (placeShip === 1) {
+            domManager.placeShip(coords, getNextShipLength(), direction);
+            lastId++;
+        } else {
+            return;
+        }
     } else {
         return;
     }

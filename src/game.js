@@ -60,7 +60,7 @@ function switchTurns() {
 
 export function handlePlaceShip(coords, id, length, direction) {
     if (playerBoard.placedShips.length < numberOfShips) {
-        playerBoard.placeShip(coords, id, length, direction);
+        return playerBoard.placeShip(coords, id, length, direction);
         console.log(playerBoard);
     } else {
         return;
