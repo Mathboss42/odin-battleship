@@ -24,14 +24,14 @@ function handleStartGame() {
     const playerGridCells = document.querySelectorAll('.player-board > .grid > .cell');
     playerGridCells.forEach(el => {
         el.addEventListener('mouseover', handleMouseOver);
-        el.addEventListener('mouseleave', handleMouseLeave);
+        // el.addEventListener('mouseleave', handleMouseLeave);
         el.addEventListener('click', handleClick);
     });
     document.addEventListener('keydown', (e) => {
         if (e.code === 'KeyR') {
-            hoveringCell.dispatchEvent(eventMouseLeave);
+            // hoveringCell.dispatchEvent(eventMouseLeave);
             direction === 'horizontal' ? direction = 'vertical' : direction = 'horizontal';
-            hoveringCell.dispatchEvent(eventMouseOver);
+            // hoveringCell.dispatchEvent(eventMouseOver);
         };
     });
 }
@@ -39,17 +39,18 @@ window.handleStartGame = handleStartGame;
 
 
 function handleMouseOver(e) {
+    domManager.clearHighlighted();
     const coords = domManager.getCoords(e);
     domManager.highlight(coords, getNextShipLength(), direction);
     hoveringCell = e.target;
     console.log('hoveringCell', hoveringCell)
 }
 
-function handleMouseLeave(e) {
-    console.log('handlemouseevent', e.target)
-    const coords = domManager.getCoords(e);
-    domManager.unHighlight(coords, getNextShipLength(), direction);
-}
+// function handleMouseLeave(e) {
+//     console.log('handlemouseevent', e.target)
+//     const coords = domManager.getCoords(e);
+//     domManager.unHighlight(coords, getNextShipLength(), direction);
+// }
 
 function handleClick(e) {
     if (game.getCurrentPhase() === 'ship placement') {

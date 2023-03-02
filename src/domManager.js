@@ -38,13 +38,21 @@ export function highlight(coords, length, direction) {
     console.log(cells);
 }
 
-export function unHighlight(coords, length, direction) {
-    console.log('unHilight');
-    const cells = getAllCells(coords, length, direction);
-    // console.log(cells);
+// export function unHighlight(coords, length, direction) {
+//     console.log('unHilight');
+//     const cells = getAllCells(coords, length, direction);
+//     // console.log(cells);
+
+//     cells.forEach(el => {
+//         console.log('frangipane', el)
+//         el.classList.remove('highlighted');
+//     });
+// }
+
+export function clearHighlighted() {
+    const cells = document.querySelectorAll('.highlighted');
 
     cells.forEach(el => {
-        console.log('frangipane', el)
         el.classList.remove('highlighted');
     });
 }
