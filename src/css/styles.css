@@ -98,3 +98,11 @@ h1 {
 .occupied {
     background-color: lightblue;
 }
+
+.miss {
+    background-color: blue;
+}
+
+.hit {
+    background-color: red;
+}

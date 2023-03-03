@@ -124,9 +124,9 @@ class Gameboard {
     
 
     receiveAttack(coords) {
-        console.log('receive attack', this.isAiBoard)
+        // console.log('receive attack', this.isAiBoard)
         if (coords.length !== 2 || coords[0] > this.length || coords[0] < 1 || coords[1] > this.length || coords[1] < 1) {
-            console.log('invalid coords');
+            console.log('invalid coords', coords);
             return;
         }
         if (this.firedTiles.some(el => {
@@ -138,22 +138,23 @@ class Gameboard {
             if (!this.occupiedTiles.some(el => {
                 return el[0] === coords[0] && el[1] === coords[1];
             })) {
-                console.log('frangipane')
+                // console.log('frangipane')
                 this.firedTiles.push(coords);
                 this.missedTiles.push(coords);
                 return 1;
             };
 
-            console.log('lol')
+            // console.log('lol')
             const id = this.#getId(coords);
-            console.log('id', id)
+            // console.log('id', id)
 
             const ship = this.#getShip(id).ship;
             console.log('ship', ship)
             ship.hit()
-            console.log('fasdasd')
+            // console.log('fasdasd')
 
             if (ship.hits === ship.length) {
+                console.log('ship.hits === ship.length', ship.hits === ship.length)
                 ship.sunk = true;
                 this.sunkShips++;
                 this.negScore++;
@@ -162,7 +163,7 @@ class Gameboard {
             this.hitTiles.push(coords);
             this.firedTiles.push(coords);
 
-            return 1;
+            return 2;
         }
     }
 
@@ -173,7 +174,7 @@ class Gameboard {
     }
 
     #getId(coords) {
-        return this.occupiedTiles.filter(el => el.includes(coords[0]) && el.includes(coords[1]))[0][2];
+        return this.occupiedTiles.filter(el => el[0] === coords[0] && el[1] === coords[1])[0][2];
     }
 }
 

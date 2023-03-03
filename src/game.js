@@ -25,6 +25,7 @@ export function startGame() {
     currentPlayer = player;
     currentPhase = 'ship placement'
     console.log(player, ai, playerBoard, aiBoard, currentPlayer, currentPhase)
+    handleAiPlaceShip();
 }
 
 function endGame(winner) {
@@ -34,8 +35,9 @@ function endGame(winner) {
 export function handleAttack(entity, coords = []) {
     console.log('handle attack', entity.isAi)
     const targetBoard = getTargetBoard(entity);
+    console.log(targetBoard);
     const attack = entity.attack(boardLength, targetBoard, coords);
-    console.log(attack);
+    console.log('attack return value', attack);
     if (!attack) {
         console.log('returned')
         return;
@@ -44,6 +46,8 @@ export function handleAttack(entity, coords = []) {
         endGame(entity);
     }
     switchTurns();
+
+    return attack;
 }
 
 function switchTurns() {
@@ -51,11 +55,11 @@ function switchTurns() {
     player.isMyTurn = !player.isMyTurn; 
     ai.isMyTurn = !ai.isMyTurn; 
 
-    currentPlayer === player ? ai : player;
+    currentPlayer === player ? currentPlayer = ai : currentPlayer = player;
 
-    if (currentPlayer === ai) {
-        handleAttack(ai);
-    } 
+    // if (currentPlayer === ai) {
+    //     handleAttack(ai);
+    // } 
 }
 
 export function handlePlaceShip(coords, id, length, direction) {
@@ -66,34 +70,6 @@ export function handlePlaceShip(coords, id, length, direction) {
         return;
     }
 }
-
-// export function handlePlaceShip(coords, direction) {
-//     if (playerBoard.placedShips.length < numberOfShips) {
-//         switch (lastId) {
-//             case 0 :
-//                 playerBoard.placeShip(coords, String(lastId), 4, direction);
-//                 break;
-//             case 1 :
-//             case 2 :
-//                 playerBoard.placeShip(coords, String(lastId), 3, direction);
-//                 break;
-//             case 3 :
-//             case 4 :
-//             case 5 :
-//                 playerBoard.placeShip(coords, String(lastId), 2, direction);
-//                 break;
-//             case 6 :
-//             case 7 :
-//             case 8 :
-//             case 9 :
-//                 playerBoard.placeShip(coords, String(lastId), 1, direction);
-//                 break;
-//         }
-//         lastId++;
-//     } else {
-//         return;
-//     }
-// }
 
 function handleAiPlaceShip() {
     aiBoard.placeShip(generateCoords(boardLength), String(0), 4, getRandomDirection());
@@ -132,26 +108,6 @@ export function setNextPhase() {
     }
 }
 
-// startGame();
-// console.log(aiBoard);
-// handleAiPlaceShip();
-// handlePlaceShip([4,3], 'vertical');
-// handlePlaceShip([5,3], 'vertical');
-// handlePlaceShip([6,3], 'vertical');
-// handlePlaceShip([7,3], 'vertical');
-// handlePlaceShip([8,3], 'vertical');
-// handlePlaceShip([9,3], 'vertical');
-// handlePlaceShip([10,3], 'vertical');
-// handlePlaceShip([10,4], 'vertical');
-// handlePlaceShip([10,5], 'vertical');
-// handlePlaceShip([10,6], 'vertical');
-// handlePlaceShip([10,7], 'vertical');
-// handlePlaceShip([10,8], 'vertical');
-// console.log(playerBoard);
-// handleAttack(player, [2, 2]);
-// handleAttack(ai);
-// handleAttack(player, [3, 2]);
-// handleAttack(ai);
-// handleAttack(player, [3, 2]);
-// handleAttack(player, [4, 2]);
-// handleAttack(ai);
+export function getCurrentPlayer() {
+    return currentPlayer;
+}

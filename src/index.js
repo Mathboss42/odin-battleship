@@ -48,8 +48,9 @@ function handleMouseLeave(e) {
 }
 
 function handleClick(e) {
+    const coords = domManager.getCoords(e);
+
     if (game.getCurrentPhase() === 'ship placement') {
-        const coords = domManager.getCoords(e);
 
         const placeShip = game.handlePlaceShip(coords, String(lastId), getNextShipLength(), direction);
 
@@ -65,7 +66,32 @@ function handleClick(e) {
             return;
         }
     } else if (game.getCurrentPhase() === 'game') {
-        console.log('attack');
+        // console.log('attack');
+        const playerAttack = game.handleAttack(game.getCurrentPlayer(), coords);
+        console.log(playerAttack);
+        if (playerAttack === 2) {
+            domManager.colorHit(e.target);
+        } else if (playerAttack === 1) {
+            domManager.colorMiss(e.target);
+        } else {
+            console.log('attack failed');
+            return;
+        }
+
+        if (playerAttack === 1 || playerAttack === 2) {
+            const aiAttack = game.handleAttack(game.getCurrentPlayer());
+            if (aiAttack[0] === 2) {
+                const cell = domManager.getSingleCell(aiAttack[1]);
+                domManager.colorHit(cell);
+            } else if (aiAttack[0] === 1){
+                const cell = domManager.getSingleCell(aiAttack[1]);
+                domManager.colorMiss(cell);
+            } else {
+                console.log('AI attack failed');
+                return;
+            }
+        }
+        
     }
 }
 
@@ -73,6 +99,7 @@ function handleNextPhase() {
     const playerGridCells = document.querySelectorAll('.player-board > .grid > .cell');
     playerGridCells.forEach(el => {
         el.removeEventListener('mouseover', handleMouseOver);
+        el.removeEventListener('click', handleClick);
     });
     
     const aiGridCells = document.querySelectorAll('.ai-board > .grid > .cell');

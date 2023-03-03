@@ -75,6 +75,18 @@ export function getAllCells(coords, length, direction) {
     return cells;
 }
 
+export function getSingleCell(coords, isAiBoard = false) {
+    let cell;
+    
+    if (isAiBoard) {
+        cell = document.querySelector(`.ai-board > .grid > [data-x='${coords[0]}'][data-y='${coords[1]}']`);
+    } else {
+        cell = document.querySelector(`.player-board > .grid > [data-x='${coords[0]}'][data-y='${coords[1]}']`);
+    }
+
+    return cell;
+}
+
 export function isAvailable(coords, length, direction) {
     const cells = getAllCells(coords, length, direction);
 
@@ -86,3 +98,11 @@ export function isAvailable(coords, length, direction) {
 export function highlightAttack(cell) {
     cell.classList.add('highlighted');
 }
+
+export function colorMiss(cell) {
+    cell.classList.add('miss');
+}   
+
+export function colorHit(cell) {
+    cell.classList.add('hit');
+}   

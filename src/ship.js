@@ -6,7 +6,7 @@ class Ship {
     }
 
     hit() {
-        console.log('ship is hit')
+        console.log('ship is hit', this.length)
         this.hits++;
     }
 
