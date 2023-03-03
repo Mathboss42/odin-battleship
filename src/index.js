@@ -18,59 +18,76 @@ let direction = 'horizontal';
 
 
 function handleStartGame() {
-    console.log('handle start')
     game.startGame();
     domManager.startGame(boardLength);
     const playerGridCells = document.querySelectorAll('.player-board > .grid > .cell');
     playerGridCells.forEach(el => {
         el.addEventListener('mouseover', handleMouseOver);
-        // el.addEventListener('mouseleave', handleMouseLeave);
+        el.addEventListener('mouseleave', handleMouseLeave);
         el.addEventListener('click', handleClick);
     });
-    document.addEventListener('keydown', (e) => {
-        if (e.code === 'KeyR') {
-            // hoveringCell.dispatchEvent(eventMouseLeave);
-            direction === 'horizontal' ? direction = 'vertical' : direction = 'horizontal';
-            hoveringCell.dispatchEvent(eventMouseOver);
-        };
-    });
+    document.addEventListener('keydown', switchDirection);
 }
 window.handleStartGame = handleStartGame;
 
 
 function handleMouseOver(e) {
-    domManager.clearHighlighted();
-    const coords = domManager.getCoords(e);
-    domManager.highlight(coords, getNextShipLength(), direction);
-    hoveringCell = e.target;
-    // console.log('hoveringCell', hoveringCell)
+    if (game.getCurrentPhase() === 'ship placement') {
+        domManager.clearHighlighted();
+        const coords = domManager.getCoords(e);
+        domManager.highlight(coords, getNextShipLength(), direction);
+        hoveringCell = e.target;
+    } else if (game.getCurrentPhase() === 'game') {
+        domManager.clearHighlighted();
+        domManager.highlightAttack(e.target);
+    }
 }
 
-// function handleMouseLeave(e) {
-//     console.log('handlemouseevent', e.target)
-//     const coords = domManager.getCoords(e);
-//     domManager.unHighlight(coords, getNextShipLength(), direction);
-// }
+function handleMouseLeave(e) {
+    domManager.clearHighlighted();
+}
 
 function handleClick(e) {
     if (game.getCurrentPhase() === 'ship placement') {
         const coords = domManager.getCoords(e);
-        // if (!game.checkAdjacent(coords, getNextShipLength(), direction)) {
-        //     console.log('adjacent');
-        //     return;
-        // }
 
         const placeShip = game.handlePlaceShip(coords, String(lastId), getNextShipLength(), direction);
-        console.log('handleClick', coords);
 
         if (placeShip === 1) {
             domManager.placeShip(coords, getNextShipLength(), direction);
             lastId++;
+
+            if (lastId > 9) {
+                game.setNextPhase();
+                handleNextPhase();
+            }
         } else {
             return;
         }
-    } else {
-        return;
+    } else if (game.getCurrentPhase() === 'game') {
+        console.log('attack');
+    }
+}
+
+function handleNextPhase() {
+    const playerGridCells = document.querySelectorAll('.player-board > .grid > .cell');
+    playerGridCells.forEach(el => {
+        el.removeEventListener('mouseover', handleMouseOver);
+    });
+    
+    const aiGridCells = document.querySelectorAll('.ai-board > .grid > .cell');
+    aiGridCells.forEach(el => {
+        el.addEventListener('mouseover', handleMouseOver);
+        el.addEventListener('click', handleClick);
+    });
+
+    document.removeEventListener('keydown', switchDirection);
+} 
+
+function switchDirection(e) {
+    if (e.code === 'KeyR') {
+        direction === 'horizontal' ? direction = 'vertical' : direction = 'horizontal';
+        hoveringCell.dispatchEvent(eventMouseOver);
     }
 }
 

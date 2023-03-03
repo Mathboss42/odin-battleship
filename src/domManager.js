@@ -2,12 +2,14 @@ const mainMenu = document.querySelector('.main-menu-container');
 const game = document.querySelector('.game-container');
 const playerGrid = document.querySelector('.player-board > .grid');
 const aiGrid = document.querySelector('.ai-board > .grid');
+const phaseDispay = document.querySelector('.phase-display');
 
 let boardSize;
 
 export function startGame(boardLength) {
     mainMenu.remove();
     game.classList.remove('hidden');
+    phaseDispay.innerHTML = '<h2>Place your ships!</h2>'
     boardSize = boardLength;
     generateGrid(boardLength, playerGrid);
     generateGrid(boardLength, aiGrid);
@@ -28,8 +30,6 @@ function generateGrid(boardLength, node) {
 export function placeShip(coords, length, direction) {
     const cells = getAllCells(coords, length, direction);
 
-    console.log('placeShip', cells, coords);
-
     cells.forEach(el => {
         el.classList.add('occupied');
     });
@@ -37,24 +37,11 @@ export function placeShip(coords, length, direction) {
 
 export function highlight(coords, length, direction) {
     const cells = getAllCells(coords, length, direction);
-
-    console.log('highlight', cells, coords);
     
     cells.forEach(el => {
         el.classList.add('highlighted');
     });
 }
-
-// export function unHighlight(coords, length, direction) {
-//     console.log('unHilight');
-//     const cells = getAllCells(coords, length, direction);
-//     // console.log(cells);
-
-//     cells.forEach(el => {
-//         console.log('frangipane', el)
-//         el.classList.remove('highlighted');
-//     });
-// }
 
 export function clearHighlighted() {
     const cells = document.querySelectorAll('.highlighted');
@@ -78,7 +65,6 @@ export function getAllCells(coords, length, direction) {
     const cells = [];
 
     for(let i = 0; i < length; i++) {
-        // console.log('asd')
         if (direction === 'horizontal') {
             cells.push(document.querySelector(`[data-x='${coords[0] + i}'][data-y='${coords[1]}']`));
         } else {
@@ -95,4 +81,8 @@ export function isAvailable(coords, length, direction) {
     cells.forEach(el => {
 
     });
+}
+
+export function highlightAttack(cell) {
+    cell.classList.add('highlighted');
 }

@@ -36,12 +36,23 @@ button {
 }
 
 .header {
-    font-family: 'Cyberpunk', 'Roboto-Bold', sans-serif;
-    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.heading,
+.phase-display {
+    height: 75px;
     display: flex;
     justify-content: center;
     align-content: center;
     flex-wrap: wrap;
+}
+
+h1 {
+    font-family: 'Cyberpunk', 'Roboto-Bold', sans-serif;
 }
 
 .main-container {

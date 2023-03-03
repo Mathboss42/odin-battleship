@@ -15,7 +15,7 @@ let ai;
 let playerBoard;
 let aiBoard;
 
-let lastId = 0; 
+// let lastId = 0; 
 
 export function startGame() {
     player = new Player(false, true);
@@ -119,6 +119,17 @@ export function getRandomDirection() {
 
 export function getCurrentPhase() {
     return currentPhase;
+}
+
+export function setNextPhase() {
+    switch (currentPhase) {
+        case 'ship placement':
+            currentPhase = 'game';
+            break;
+        case 'game':
+            currentPhase = 'game over';
+            break;
+    }
 }
 
 // startGame();
