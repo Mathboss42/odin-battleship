@@ -9,10 +9,22 @@ let boardSize;
 export function startGame(boardLength) {
     mainMenu.remove();
     game.classList.remove('hidden');
-    phaseDispay.innerHTML = '<h2>Place your ships!</h2>'
+    phaseDispay.innerHTML = '<h2>Place your ships!</h2><h5>Press R to rotate</h5>'
     boardSize = boardLength;
     generateGrid(boardLength, playerGrid);
     generateGrid(boardLength, aiGrid);
+}
+
+export function displayNextPhase(phase, winner = undefined) {
+    console.log('display next phase')
+    switch (phase) {
+        case 'game':
+            phaseDispay.innerHTML = '<h2>Fight!</h2>'
+            break;
+        
+        case 'win':
+            phaseDispay.innerHTML = `<h2>${winner} won!</h2>`
+    }
 }
 
 function generateGrid(boardLength, node) {
@@ -106,3 +118,11 @@ export function colorMiss(cell) {
 export function colorHit(cell) {
     cell.classList.add('hit');
 }   
+
+export function colorLastPlayerCell() {
+    console.log('color last player cell')
+    const cells = document.querySelector('.player-board > .grid > .cell');
+    const cell = cells.filter(el => el.classList.contains('occupied') && !el.classList.contains('hit'));
+    console.log(cell);
+    cell.classList.add('hit');
+}

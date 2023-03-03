@@ -42,9 +42,19 @@ export function handleAttack(entity, coords = []) {
         console.log('returned')
         return;
     }
-    if (targetBoard.negScore === targetBoard.placedShips.length) {
-        endGame(entity);
+    // if (targetBoard.negScore === targetBoard.placedShips.length) {
+    //     endGame(entity);
+    // }
+
+    if (targetBoard.sunkShips === numberOfShips) {
+        console.log('return 3')
+        if (entity.isAi) {
+            return [3, attack[1]];
+        } else {
+            return 3;
+        }
     }
+
     switchTurns();
 
     return attack;

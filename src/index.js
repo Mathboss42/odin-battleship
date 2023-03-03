@@ -60,7 +60,8 @@ function handleClick(e) {
 
             if (lastId > 9) {
                 game.setNextPhase();
-                handleNextPhase();
+                domManager.displayNextPhase('game');
+                handleNextPhase(game.getCurrentPhase());
             }
         } else {
             return;
@@ -73,42 +74,86 @@ function handleClick(e) {
             domManager.colorHit(e.target);
         } else if (playerAttack === 1) {
             domManager.colorMiss(e.target);
+        } else if (playerAttack === 3) {
+            domManager.colorHit(e.target);
+            handleNextPhase('win', 'Player');
+            game.setNextPhase();
+            domManager.displayNextPhase('win', 'Player');
         } else {
             console.log('attack failed');
             return;
         }
 
         if (playerAttack === 1 || playerAttack === 2) {
-            const aiAttack = game.handleAttack(game.getCurrentPlayer());
-            if (aiAttack[0] === 2) {
-                const cell = domManager.getSingleCell(aiAttack[1]);
-                domManager.colorHit(cell);
-            } else if (aiAttack[0] === 1){
-                const cell = domManager.getSingleCell(aiAttack[1]);
-                domManager.colorMiss(cell);
-            } else {
-                console.log('AI attack failed');
-                return;
-            }
+            
+            const aiGridCells = document.querySelectorAll('.ai-board > .grid > .cell');
+            aiGridCells.forEach(el => {
+                el.removeEventListener('click', handleClick);
+            });
+
+            setTimeout(() => {
+                const aiAttack = game.handleAttack(game.getCurrentPlayer());
+
+                if (aiAttack[0] === 2) {
+                    const cell = domManager.getSingleCell(aiAttack[1]);
+                    domManager.colorHit(cell);
+                    aiGridCells.forEach(el => {
+                        el.addEventListener('click', handleClick);
+                    });
+                } else if (aiAttack[0] === 1){
+                    const cell = domManager.getSingleCell(aiAttack[1]);
+                    domManager.colorMiss(cell);
+                    aiGridCells.forEach(el => {
+                        el.addEventListener('click', handleClick);
+                    });
+                } else if (aiAttack[0] === 3) {
+                    console.log('ai win');
+                    // domManager.colorLastPlayerCell();
+                    handleNextPhase('win');
+                    // game.setNextPhase();
+                    domManager.displayNextPhase('win', 'AI');
+                    const cell = domManager.getSingleCell(aiAttack[1]);
+                    domManager.colorMiss(cell);
+                } else {
+                    aiGridCells.forEach(el => {
+                        el.addEventListener('click', handleClick);
+                    });
+                    console.log('AI attack failed');
+                    return;
+                }
+            }, 500);
         }
         
     }
 }
 
-function handleNextPhase() {
-    const playerGridCells = document.querySelectorAll('.player-board > .grid > .cell');
-    playerGridCells.forEach(el => {
-        el.removeEventListener('mouseover', handleMouseOver);
-        el.removeEventListener('click', handleClick);
-    });
-    
+function handleNextPhase(phase) {
     const aiGridCells = document.querySelectorAll('.ai-board > .grid > .cell');
-    aiGridCells.forEach(el => {
-        el.addEventListener('mouseover', handleMouseOver);
-        el.addEventListener('click', handleClick);
-    });
+    const playerGridCells = document.querySelectorAll('.player-board > .grid > .cell');
+    
+    switch (phase) {
+        case 'game':
+            playerGridCells.forEach(el => {
+                el.removeEventListener('mouseover', handleMouseOver);
+                el.removeEventListener('click', handleClick);
+            });
+            
+            aiGridCells.forEach(el => {
+                el.addEventListener('mouseover', handleMouseOver);
+                el.addEventListener('click', handleClick);
+            });
 
-    document.removeEventListener('keydown', switchDirection);
+            document.removeEventListener('keydown', switchDirection);
+            break;
+
+        case 'win':
+            aiGridCells.forEach(el => {
+                el.removeEventListener('mouseover', handleMouseOver);
+                el.removeEventListener('click', handleClick);
+            });
+    }
+        
+
 } 
 
 function switchDirection(e) {
